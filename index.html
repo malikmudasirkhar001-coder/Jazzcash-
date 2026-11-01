@@ -1,26 +1,23 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>JazzCash Payment App</title>
-    <!-- Font Awesome Icons -->
+    <title>JazzCash Payment</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --bg-color: #f7f7f8;
-            --text-main: #1f2937;
-            --text-muted: #6b7280;
-            --border-color: #e5e7eb;
-            --yellow: #facc15;
-            --jazz-yellow: #f9b200;
-            --jazz-red: #d32027;
-            --primary: #dc2626;
-            --dark-btn: #1f1f23;
+            --bg-body: #f8fafc;
+            --bg-card: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --border-light: #e2e8f0;
+            --yellow: #ffb703;
+            --red-jazz: #d90429;
+            --dark-btn: #1a1a1a;
         }
 
         * {
@@ -35,97 +32,85 @@
         html, body {
             width: 100%;
             height: 100%;
-            margin: 0;
-            padding: 0;
-            background-color: #ffffff;
-            overflow: hidden;
+            background-color: #0b0f19;
             display: flex;
             justify-content: center;
             align-items: center;
+            overflow: hidden;
         }
 
-        /* Seamless Edge-to-Edge Container for Mobile */
+        /* Responsive Mobile Container */
         .phone-shell {
-            width: 100%;
-            height: 100%;
-            background-color: var(--bg-color);
+            width: 100vw;
+            height: 100vh;
+            background-color: #ffffff;
+            position: relative;
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            position: relative;
         }
 
         @media (min-width: 480px) {
-            body {
-                background-color: #0e1013;
-            }
             .phone-shell {
-                max-width: 410px;
-                max-height: 870px;
+                max-width: 412px;
+                max-height: 892px;
                 border-radius: 40px;
-                border: 8px solid #23272e;
-                box-shadow: 0 25px 60px rgba(0,0,0,0.65);
+                box-shadow: 0 25px 60px rgba(0,0,0,0.45);
+                border: 8px solid #27272a;
             }
         }
 
-        /* Screen Framework */
-        .app-screen {
+        .screen {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: var(--bg-color);
+            inset: 0;
+            background: #ffffff;
             display: none;
             flex-direction: column;
-            z-index: 10;
             overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
+            z-index: 10;
         }
 
-        .app-screen.active {
+        .screen.active {
             display: flex;
         }
 
-        /* Top Bar */
-        .top-bar {
+        /* Top Header */
+        .top-nav {
             display: flex;
             align-items: center;
             justify-content: space-between;
             padding: 16px 20px;
-            background-color: #ffffff;
-            border-bottom: 1px solid var(--border-color);
-            position: sticky;
-            top: 0;
-            z-index: 20;
+            background: #ffffff;
+            border-bottom: 1px solid var(--border-light);
         }
 
-        .top-bar .title {
-            font-size: 16px;
-            font-weight: 600;
-            color: var(--text-main);
-        }
-
-        .action-icon {
-            font-size: 16px;
-            color: #374151;
-            cursor: pointer;
+        .top-nav .nav-btn {
             width: 36px;
             height: 36px;
+            border-radius: 50%;
+            background: #f1f5f9;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 50%;
-            background: #f3f4f6;
-            transition: background 0.2s;
+            color: #334155;
+            cursor: pointer;
+            font-size: 15px;
+            transition: 0.2s;
         }
 
-        .action-icon:active {
-            background: #e5e7eb;
+        .top-nav .nav-btn:active {
+            background: #e2e8f0;
+            transform: scale(0.95);
         }
 
-        /* Next Button */
-        .next-btn {
+        .top-nav .title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        /* Universal Primary Buttons */
+        .primary-action-btn {
             width: 100%;
             background: var(--dark-btn);
             color: var(--yellow);
@@ -140,525 +125,363 @@
             gap: 10px;
             cursor: pointer;
             transition: all 0.2s ease;
-            box-shadow: 0 4px 14px rgba(0,0,0,0.15);
         }
 
-        .next-btn:active {
-            transform: scale(0.98);
-        }
-
-        .next-btn:disabled {
+        .primary-action-btn:disabled {
             opacity: 0.45;
-            cursor: not-allowed;
             pointer-events: none;
         }
 
-        /* --- SCREEN 1: INPUT DETAILS --- */
-        .input-body { 
-            padding: 24px 20px; 
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-        }
-        
-        .input-label { 
-            font-size: 13px; 
-            font-weight: 600; 
-            color: #374151; 
-            margin-bottom: 4px; 
-            display: block; 
+        .primary-action-btn:active {
+            transform: scale(0.98);
         }
 
-        .custom-input { 
-            width: 100%; 
-            padding: 14px 16px; 
-            border: 1.5px solid var(--border-color); 
-            border-radius: 12px; 
-            font-size: 15px; 
-            outline: none; 
-            background: #ffffff; 
-            color: #111827; 
+        /* SCREEN 1: INPUTS */
+        .input-container {
+            padding: 24px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            flex: 1;
+        }
+
+        .field-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #475569;
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 15px 16px;
+            border: 1.5px solid var(--border-light);
+            border-radius: 12px;
+            font-size: 15px;
+            color: var(--text-primary);
+            background: #f8fafc;
+            outline: none;
             transition: 0.2s;
         }
 
-        .custom-input:focus { 
-            border-color: #dc2626; 
-            box-shadow: 0 0 0 3px rgba(220,38,38,0.12); 
+        .form-input:focus {
+            border-color: var(--red-jazz);
+            background: #ffffff;
+            box-shadow: 0 0 0 4px rgba(217, 4, 41, 0.08);
         }
 
-        /* --- SCREEN 2: SELECT METHOD --- */
-        .method-body { padding: 20px; }
-        .method-grid { display: flex; flex-direction: column; gap: 14px; margin-bottom: 25px; }
-        .method-item { 
-            background: #fff; 
-            border: 1.5px solid var(--border-color); 
-            border-radius: 16px; 
-            padding: 16px 18px; 
-            display: flex; 
-            align-items: center; 
-            gap: 15px; 
-            cursor: pointer; 
-            transition: all 0.2s ease; 
-        }
-
-        .method-item:active {
-            transform: scale(0.98);
-        }
-
-        .method-item.selected { 
-            border-color: #dc2626; 
-            background: #fef2f2; 
-            box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.15); 
-        }
-
-        .method-icon { 
-            width: 44px; 
-            height: 44px; 
-            border-radius: 12px; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            font-size: 20px; 
-        }
-
-        .method-text { 
-            font-size: 16px; 
-            font-weight: 600; 
-            color: #1f2937; 
-            flex: 1; 
-        }
-
-        .method-check { 
-            font-size: 20px; 
-            color: #dc2626; 
-            opacity: 0; 
-            transition: 0.2s; 
-        }
-
-        .method-item.selected .method-check { opacity: 1; }
-
-        /* --- SCREEN 3: REVIEW & CONFIRM --- */
-        .review-container { 
-            background-color: var(--bg-color); 
-            height: 100%; 
-            display: flex; 
-            flex-direction: column; 
-        }
-
-        .review-top-bar { 
-            background: transparent; 
-            padding: 16px 20px; 
-            display: flex; 
-            align-items: center; 
-            justify-content: space-between; 
-        }
-
-        .review-top-bar .title { 
-            text-align: center; 
-            font-size: 15px; 
-            font-weight: 600; 
-            color: #374151; 
-            flex: 1; 
-        }
-
-        .review-top-bar .title span { 
-            font-size: 11px; 
-            font-weight: 400; 
-            color: #9ca3af; 
-            display: block; 
-            margin-top: 2px; 
-        }
-
-        .review-body { padding: 0 16px; flex: 1; overflow-y: auto; }
-        
-        .total-amount-section { 
-            margin-top: 8px; 
-            margin-bottom: 16px; 
-            padding: 0 4px; 
-        }
-
-        .total-amount-section .label { 
-            font-size: 12px; 
-            color: #6b7280; 
-        }
-
-        .total-amount-section .amount { 
-            font-size: 26px; 
-            font-weight: 700; 
-            color: #111827; 
-            margin-top: 4px; 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-        }
-
-        .review-card { 
-            background: #ffffff; 
-            border-radius: 16px; 
-            margin-bottom: 14px; 
-            padding: 18px; 
-            box-shadow: 0 2px 10px rgba(0,0,0,0.03); 
-        }
-
-        .review-row { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            padding: 12px 0; 
-            border-bottom: 1px solid #f3f4f6; 
-        }
-
-        .review-row:last-child { border-bottom: none; }
-
-        .favorite-btn { 
-            background: #fef9c3; 
-            color: #854d0e; 
-            border: none; 
-            border-radius: 20px; 
-            padding: 6px 14px; 
-            font-size: 11px; 
-            font-weight: 700; 
-            display: flex; 
-            align-items: center; 
-            gap: 5px; 
-            cursor: pointer; 
-        }
-
-        .toggle-switch { 
-            width: 42px; 
-            height: 24px; 
-            background: #e5e7eb; 
-            border-radius: 20px; 
-            position: relative; 
-            cursor: pointer; 
-            transition: background 0.3s;
-        }
-
-        .toggle-switch.active {
-            background: #22c55e;
-        }
-
-        .toggle-switch::after { 
-            content: ''; 
-            position: absolute; 
-            width: 18px; 
-            height: 18px; 
-            background: white; 
-            border-radius: 50%; 
-            top: 3px; 
-            left: 3px; 
-            transition: 0.3s; 
-            box-shadow: 0 1px 3px rgba(0,0,0,0.2); 
-        }
-
-        .toggle-switch.active::after {
-            left: 21px;
-        }
-
-        .review-footer { 
-            padding: 16px 20px; 
-            background: #ffffff; 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            border-top: 1px solid var(--border-color); 
-            margin-top: auto; 
-        }
-
-        .review-footer .total-label { font-size: 11px; color: #6b7280; }
-        .review-footer .total-val { font-size: 17px; font-weight: 700; color: #111827; }
-
-        .confirm-btn { 
-            background: #232327; 
-            color: var(--yellow); 
-            border: none; 
-            border-radius: 30px; 
-            padding: 14px 28px; 
-            font-size: 15px; 
-            font-weight: 700; 
-            display: flex; 
-            align-items: center; 
-            gap: 8px; 
-            cursor: pointer; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.18); 
-            transition: transform 0.15s;
-        }
-
-        .confirm-btn:active { transform: scale(0.97); }
-
-        /* --- SCREEN 4: MPIN SCREEN --- */
-        .mpin-screen { background: #ffffff; }
-        
-        .mpin-header { 
-            background: #27272a; 
-            color: white; 
-            padding: 16px 20px; 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-        }
-
-        .mpin-header .dots { display: flex; gap: 5px; }
-        .mpin-header .dots span { width: 5px; height: 5px; background: var(--yellow); border-radius: 50%; }
-        .mpin-header .icons { display: flex; gap: 18px; font-size: 16px; }
-
-        .mpin-content { padding: 25px 22px 10px; }
-        .mpin-content h2 { font-size: 19px; font-weight: 600; color: #1f2937; margin-bottom: 5px; }
-        .mpin-content p { font-size: 13px; color: #6b7280; }
-
-        .mpin-dots-row { 
-            display: flex; 
-            gap: 15px; 
-            padding: 25px 22px; 
-            justify-content: space-between; 
-            align-items: center; 
-            border-bottom: 1px solid #f3f4f6; 
-        }
-
-        .mpin-dots-left { display: flex; gap: 15px; }
-        .mpin-dot { 
-            width: 14px; 
-            height: 14px; 
-            background: #e5e7eb; 
-            border-radius: 50%; 
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); 
-        }
-
-        .mpin-dot.filled { 
-            background: #facc15; 
-            transform: scale(1.15); 
-            box-shadow: 0 0 6px rgba(250, 204, 21, 0.6); 
-        }
-
-        .mpin-forgot { font-size: 12px; color: #6b7280; cursor: pointer; }
-        .mpin-warning { 
-            padding: 0 22px; 
-            margin-top: 18px; 
-            font-size: 11.5px; 
-            color: #6b7280; 
-            display: flex; 
-            align-items: center; 
-            gap: 6px; 
-        }
-
-        .keypad { 
-            display: grid; 
-            grid-template-columns: repeat(3, 1fr); 
-            gap: 12px; 
-            padding: 20px 30px; 
-            justify-items: center; 
-            margin-top: auto; 
-            margin-bottom: 8px; 
-        }
-
-        .keypad button { 
-            background: transparent; 
-            border: none; 
-            font-size: 26px; 
-            color: #1f2937; 
-            font-weight: 500; 
-            cursor: pointer; 
-            width: 64px; 
-            height: 64px; 
-            border-radius: 50%; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            transition: background 0.15s ease; 
-        }
-
-        .keypad button:active { background: #f3f4f6; }
-        .mpin-footer { padding: 0 30px 20px; font-size: 12px; color: #6b7280; font-weight: 500; }
-
-        /* --- SCREEN 5: SUCCESS RECEIPT SCREEN --- */
-        .success-screen { 
-            background: #f8f9fa; 
-            align-items: center; 
-            padding: 30px 20px 24px; 
-            justify-content: flex-start; 
-        }
-
-        .success-logo-wrapper {
-            margin-top: 4px;
-            margin-bottom: 16px;
+        /* SCREEN 2: SELECT METHOD */
+        .method-list {
+            padding: 20px;
             display: flex;
+            flex-direction: column;
+            gap: 12px;
+            flex: 1;
+        }
+
+        .method-item {
+            background: #ffffff;
+            border: 1.5px solid var(--border-light);
+            border-radius: 14px;
+            padding: 16px 18px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .method-item.selected {
+            border-color: var(--red-jazz);
+            background: #fff5f5;
+        }
+
+        .method-badge {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
             justify-content: center;
+            font-size: 20px;
         }
 
-        .success-date { 
-            font-size: 12px; 
-            color: #6b7280; 
-            margin-bottom: 6px; 
-            font-weight: 500; 
-            letter-spacing: -0.2px; 
+        .method-name {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-primary);
+            flex: 1;
         }
 
-        .success-title { 
-            font-size: 21px; 
-            font-weight: 700; 
-            color: #374151; 
-            margin-bottom: 6px; 
-            letter-spacing: -0.3px; 
-        }
-
-        .success-subtitle { 
-            font-size: 13px; 
-            color: #6b7280; 
-            margin-bottom: 24px; 
-            font-weight: 500; 
-        }
-        
-        /* Receipt ticket card with clean curved cutouts */
-        .receipt-card { 
-            background: #ffffff; 
-            width: 100%; 
-            border-radius: 18px; 
-            padding: 26px 20px 22px; 
-            text-align: center; 
-            box-shadow: 0 4px 18px rgba(0,0,0,0.03); 
-            margin-bottom: 20px; 
-            position: relative; 
-            border: 1px solid #eef0f3; 
-        }
-        
-        .receipt-card::before, .receipt-card::after { 
-            content: ''; 
-            position: absolute; 
-            width: 20px; 
-            height: 20px; 
-            background-color: #f8f9fa; 
-            border-radius: 50%; 
-            top: 56.5%; 
-            transform: translateY(-50%); 
-        }
-
-        .receipt-card::before { left: -10px; }
-        .receipt-card::after { right: -10px; }
-
-        .success-amount { 
-            font-size: 28px; 
-            font-weight: 700; 
-            color: #27272a; 
-            margin-bottom: 6px; 
-        }
-
-        .success-amount sup { 
-            font-size: 15px; 
-            font-weight: 600; 
-            top: -0.5em; 
-        }
-
-        .success-transferred { 
-            font-size: 12px; 
-            color: #6b7280; 
-            margin-bottom: 4px; 
-        }
-
-        .success-name { 
-            font-size: 16px; 
-            font-weight: 700; 
-            color: #1f2937; 
-            margin-bottom: 4px; 
-        }
-
-        .success-number { 
-            font-size: 13px; 
-            color: #6b7280; 
-            margin-bottom: 22px; 
-        }
-        
-        .receipt-divider { 
-            position: relative; 
-            height: 1px; 
-            margin-bottom: 18px; 
-        }
-
-        .receipt-divider::after { 
-            content: ''; 
-            position: absolute; 
-            top: 0; 
-            left: 0; 
-            right: 0; 
-            border-top: 1.5px dashed #d1d5db; 
-        }
-
-        .receipt-row { 
-            display: flex; 
-            justify-content: space-between; 
-            font-size: 13px; 
-            color: #6b7280; 
-            margin-bottom: 12px; 
-        }
-
-        .receipt-row:last-child { margin-bottom: 0; }
-        .receipt-row span:last-child { font-weight: 600; color: #1f2937; }
-        
-        .secure-badge { 
-            font-size: 12px; 
-            color: #6b7280; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            gap: 6px; 
-            margin-bottom: 26px; 
-        }
-        
-        .success-actions { 
-            display: flex; 
-            gap: 14px; 
-            width: 100%; 
-            margin-top: auto; 
-            margin-bottom: 10px; 
-        }
-
-        .action-btn { 
-            flex: 1; 
-            background: #ffffff; 
-            border: 1px solid #d1d5db; 
-            border-radius: 28px; 
-            padding: 13px 14px; 
-            font-size: 14px; 
-            font-weight: 600; 
-            color: #374151; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            gap: 8px; 
-            cursor: pointer; 
-            box-shadow: 0 1px 3px rgba(0,0,0,0.04); 
-            transition: all 0.2s ease; 
-        }
-
-        .action-btn:active { 
-            background: #f3f4f6; 
-            transform: scale(0.98); 
-        }
-
-        .action-btn i { font-size: 15px; }
-
-        /* Custom Notification Toast */
-        .toast-msg {
-            position: absolute;
-            bottom: 24px;
-            left: 50%;
-            transform: translateX(-50%) translateY(70px);
-            background: rgba(31, 41, 55, 0.95);
-            color: #fff;
-            padding: 10px 20px;
-            border-radius: 24px;
-            font-size: 13px;
-            font-weight: 500;
-            z-index: 100;
+        .method-radio {
+            font-size: 18px;
+            color: var(--red-jazz);
             opacity: 0;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 14px rgba(0,0,0,0.25);
-            pointer-events: none;
-            white-space: nowrap;
+            transition: 0.2s;
         }
 
-        .toast-msg.show {
+        .method-item.selected .method-radio {
             opacity: 1;
-            transform: translateX(-50%) translateY(0);
+        }
+
+        /* SCREEN 3: CONFIRMATION */
+        .review-wrapper {
+            background-color: #f8fafc;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 20px 16px;
+            overflow-y: auto;
+        }
+
+        .total-banner {
+            margin-bottom: 16px;
+            padding: 0 4px;
+        }
+
+        .total-banner span {
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .total-banner h3 {
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--text-primary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 4px;
+        }
+
+        .review-card {
+            background: #ffffff;
+            border-radius: 18px;
+            padding: 18px 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            border: 1px solid #f1f5f9;
+        }
+
+        .review-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 14px;
+            border-bottom: 1px dashed var(--border-light);
+        }
+
+        .card-star-btn {
+            background: #fef9c3;
+            color: #854d0e;
+            border: none;
+            border-radius: 20px;
+            padding: 6px 12px;
+            font-size: 11px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+        }
+
+        .review-footer-bar {
+            padding: 16px 20px;
+            background: #ffffff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid var(--border-light);
+            margin-top: auto;
+        }
+
+        .confirm-pill {
+            background: var(--dark-btn);
+            color: var(--yellow);
+            border: none;
+            border-radius: 30px;
+            padding: 14px 28px;
+            font-size: 15px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        /* SCREEN 4: MPIN */
+        .mpin-wrap {
+            background: #ffffff;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .mpin-dark-header {
+            background: #18181b;
+            color: #ffffff;
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .pin-dots-display {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 30px 24px 20px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .dots-left {
+            display: flex;
+            gap: 16px;
+        }
+
+        .dot-slot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: #e2e8f0;
+            transition: 0.2s;
+        }
+
+        .dot-slot.active {
+            background: var(--yellow);
+            transform: scale(1.15);
+        }
+
+        .keypad-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            padding: 24px;
+            justify-items: center;
+            margin-top: auto;
+            margin-bottom: 10px;
+        }
+
+        .keypad-btn {
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            border: none;
+            background: transparent;
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--text-primary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.15s;
+        }
+
+        .keypad-btn:active {
+            background: #f1f5f9;
+            transform: scale(0.92);
+        }
+
+        /* SCREEN 5: FINAL RECEIPT SCREEN (100% REPLICA) */
+        .receipt-screen {
+            background: #f4f5f7;
+            align-items: center;
+            padding: 30px 16px 20px;
+            position: relative;
+        }
+
+        .receipt-card {
+            background: #ffffff;
+            width: 100%;
+            max-width: 350px;
+            border-radius: 20px;
+            padding: 32px 20px 24px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+            margin: 20px 0 24px;
+        }
+
+        /* Ticket Notches */
+        .receipt-card::before, .receipt-card::after {
+            content: '';
+            position: absolute;
+            width: 22px;
+            height: 22px;
+            background-color: #f4f5f7;
+            border-radius: 50%;
+            top: 56%;
+            transform: translateY(-50%);
+        }
+
+        .receipt-card::before { left: -11px; }
+        .receipt-card::after { right: -11px; }
+
+        .receipt-amount {
+            font-size: 28px;
+            font-weight: 800;
+            color: #1e293b;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: baseline;
+            justify-content: center;
+            gap: 2px;
+        }
+
+        .receipt-amount sup {
+            font-size: 15px;
+            font-weight: 700;
+            top: -0.6em;
+        }
+
+        .dashed-split {
+            border-top: 1.5px dashed #cbd5e1;
+            margin: 22px 0 20px;
+        }
+
+        .receipt-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13.5px;
+            color: #64748b;
+            margin-bottom: 12px;
+        }
+
+        .receipt-row .val {
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .action-pills-row {
+            display: flex;
+            gap: 12px;
+            width: 100%;
+            max-width: 350px;
+        }
+
+        .pill-btn {
+            flex: 1;
+            background: #ffffff;
+            border: 1px solid #d1d5db;
+            border-radius: 30px;
+            padding: 13px 10px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+        }
+
+        .pill-btn:active {
+            background: #f8fafc;
+            transform: scale(0.98);
         }
     </style>
 </head>
@@ -667,498 +490,418 @@
 <div class="phone-shell">
 
     <!-- SCREEN 1: INPUT DETAILS -->
-    <div id="screen-input" class="app-screen active">
-        <div class="top-bar">
-            <div class="action-icon" onclick="showToast('Home')"><i class="fa-solid fa-arrow-left"></i></div>
-            <div class="title">Payment Details</div>
-            <div class="action-icon" onclick="resetForm()"><i class="fa-solid fa-rotate-right"></i></div>
+    <div id="screen-input" class="screen active">
+        <div class="top-nav">
+            <div class="nav-btn"><i class="fa-solid fa-arrow-left"></i></div>
+            <div class="title">Payment Transfer</div>
+            <div class="nav-btn"><i class="fa-solid fa-house"></i></div>
         </div>
-        
-        <div class="input-body">
+
+        <div class="input-container">
             <div>
-                <label class="input-label">Account Title / Name</label>
-                <input type="text" id="input-name" class="custom-input" placeholder="e.g. Peer G Cafe" value="Peer G Cafe" oninput="validateInput()">
+                <label class="field-label">Recipient / Account Title</label>
+                <input type="text" id="cust-name" class="form-input" placeholder="e.g. Peer G Cafe" value="Peer G Cafe" oninput="validateInput()">
             </div>
             
             <div>
-                <label class="input-label">Account Number / Till ID</label>
-                <input type="text" id="input-number" class="custom-input" placeholder="e.g. 983655677" value="983655677" oninput="validateInput()">
+                <label class="field-label">Mobile Number / Till ID</label>
+                <input type="text" id="cust-number" class="form-input" placeholder="e.g. 983655677" value="983655677" oninput="validateInput()">
             </div>
 
             <div>
-                <label class="input-label">Amount (PKR)</label>
-                <input type="number" id="input-amount" class="custom-input" placeholder="1300" value="1300" oninput="validateInput()">
+                <label class="field-label">Amount (Rs.)</label>
+                <input type="number" id="cust-amount" class="form-input" placeholder="1300" value="1300" oninput="validateInput()">
             </div>
-            
-            <div style="margin-top: 15px;">
-                <button class="next-btn" onclick="goToMethodScreen()" id="input-next-btn">
-                    Next <i class="fa-solid fa-arrow-right"></i>
+
+            <div style="margin-top: auto;">
+                <button class="primary-action-btn" id="btn-to-method" onclick="switchScreen('screen-method')">
+                    Continue <i class="fa-solid fa-arrow-right"></i>
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- SCREEN 2: SELECT PAYMENT METHOD -->
-    <div id="screen-method" class="app-screen">
-        <div class="top-bar">
-            <div class="action-icon" onclick="navigateTo('screen-input')"><i class="fa-solid fa-arrow-left"></i></div>
-            <div class="title">Select Payment Method</div>
-            <div class="action-icon" onclick="navigateTo('screen-input')"><i class="fa-solid fa-house"></i></div>
+    <!-- SCREEN 2: PAYMENT METHOD -->
+    <div id="screen-method" class="screen">
+        <div class="top-nav">
+            <div class="nav-btn" onclick="switchScreen('screen-input')"><i class="fa-solid fa-arrow-left"></i></div>
+            <div class="title">Payment Method</div>
+            <div class="nav-btn"><i class="fa-solid fa-house"></i></div>
         </div>
-        
-        <div class="method-body">
-            <div class="method-grid">
-                <div class="method-item selected" id="method-JazzCash" onclick="selectMethod('QR Payment', 'JazzCash Wallet', this)">
-                    <div class="method-icon" style="background:#fee2e2; color:#dc2626;"><i class="fa-solid fa-qrcode"></i></div>
-                    <div class="method-text">QR Payment</div>
-                    <i class="fa-solid fa-circle-check method-check"></i>
-                </div>
-                <div class="method-item" id="method-Wallet" onclick="selectMethod('JazzCash Wallet', 'JazzCash Wallet', this)">
-                    <div class="method-icon" style="background:#fee2e2; color:#dc2626;"><i class="fa-solid fa-wallet"></i></div>
-                    <div class="method-text">JazzCash Mobile Account</div>
-                    <i class="fa-solid fa-circle-check method-check"></i>
-                </div>
-                <div class="method-item" id="method-Till" onclick="selectMethod('Till Payment', 'Merchant Till ID', this)">
-                    <div class="method-icon" style="background:#fef3c7; color:#f59e0b;"><i class="fa-solid fa-store"></i></div>
-                    <div class="method-text">Till ID Payment</div>
-                    <i class="fa-solid fa-circle-check method-check"></i>
-                </div>
-                <div class="method-item" id="method-Bank" onclick="selectMethod('Bank Transfer', 'Bank Account', this)">
-                    <div class="method-icon" style="background:#dbeafe; color:#2563eb;"><i class="fa-solid fa-building-columns"></i></div>
-                    <div class="method-text">Bank Account</div>
-                    <i class="fa-solid fa-circle-check method-check"></i>
-                </div>
+
+        <div class="method-list">
+            <div class="method-item selected" onclick="pickMethod(this, 'QR Payment')">
+                <div class="method-badge" style="background:#fee2e2; color:var(--red-jazz);"><i class="fa-solid fa-qrcode"></i></div>
+                <div class="method-name">JazzCash QR Payment</div>
+                <i class="fa-solid fa-circle-check method-radio"></i>
+            </div>
+            <div class="method-item" onclick="pickMethod(this, 'JazzCash Wallet')">
+                <div class="method-badge" style="background:#fee2e2; color:var(--red-jazz);"><i class="fa-solid fa-wallet"></i></div>
+                <div class="method-name">JazzCash Wallet</div>
+                <i class="fa-solid fa-circle-check method-radio"></i>
+            </div>
+            <div class="method-item" onclick="pickMethod(this, 'Till Account')">
+                <div class="method-badge" style="background:#fef3c7; color:#f59e0b;"><i class="fa-solid fa-store"></i></div>
+                <div class="method-name">Till ID Payment</div>
+                <i class="fa-solid fa-circle-check method-radio"></i>
             </div>
 
-            <button class="next-btn" onclick="goToConfirmScreen()" id="method-next-btn">
-                Proceed <i class="fa-solid fa-arrow-right"></i>
-            </button>
+            <div style="margin-top: auto;">
+                <button class="primary-action-btn" onclick="openReviewScreen()">
+                    Next Step <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
         </div>
     </div>
 
     <!-- SCREEN 3: REVIEW & CONFIRM -->
-    <div id="screen-confirm" class="app-screen review-container">
-        <div class="review-top-bar">
-            <div class="action-icon" onclick="navigateTo('screen-method')"><i class="fa-solid fa-arrow-left"></i></div>
-            <div class="title">Review & Confirm<br><span id="review-type-header">JazzCash Wallet</span></div>
-            <div class="action-icon" onclick="navigateTo('screen-input')"><i class="fa-solid fa-house"></i></div>
+    <div id="screen-confirm" class="screen">
+        <div class="top-nav" style="background:transparent; border:none;">
+            <div class="nav-btn" onclick="switchScreen('screen-method')"><i class="fa-solid fa-arrow-left"></i></div>
+            <div style="text-align: center;">
+                <div class="title">Review & Confirm</div>
+                <span style="font-size:11px; color:#94a3b8;" id="rev-method-sub">QR Payment</span>
+            </div>
+            <div class="nav-btn"><i class="fa-solid fa-house"></i></div>
         </div>
-        
-        <div class="review-body">
-            <div class="total-amount-section">
-                <div class="label">Total Amount</div>
-                <div class="amount"><span id="review-total-amount">Rs. 1,300</span> <i class="fa-solid fa-chevron-down" style="font-size:14px; color:#9ca3af;"></i></div>
+
+        <div class="review-wrapper">
+            <div class="total-banner">
+                <span>Total Amount</span>
+                <h3 id="rev-total-header">Rs. 1,300.00 <i class="fa-solid fa-chevron-down" style="font-size:14px; color:#94a3b8;"></i></h3>
             </div>
 
-            <div class="review-card" style="padding-top:12px; padding-bottom:14px;">
-                <div class="review-row" style="border-bottom: 1px dashed #e5e7eb; padding-bottom:12px;">
-                    <div style="display:flex; align-items:center; gap:10px;">
-                        <!-- Inline Mini JazzCash Badge -->
-                        <svg width="24" height="24" viewBox="0 0 100 100">
-                            <circle cx="50" cy="50" r="48" fill="#222" />
-                            <circle cx="50" cy="50" r="46" fill="none" stroke="#ea580c" stroke-width="3" />
-                            <path d="M 38 28 C 45 28 49 32 50 37 C 51 45 42 55 35 62 C 28 69 22 72 32 72 C 45 72 54 60 55 48 C 55 36 47 28 38 28 Z" fill="#facc15" />
-                            <path d="M 48 34 C 54 36 57 43 56 50 C 54 61 46 66 52 70 C 60 70 70 59 70 47 C 70 33 60 28 48 34 Z" fill="#dc2626" />
-                        </svg>
-                        <span style="font-size:14px; font-weight:600; color:#374151;">To</span>
-                    </div>
-                    <button class="favorite-btn" onclick="showToast('Added to Favorites!')"><i class="fa-regular fa-star"></i> Favorite</button>
+            <div class="review-card">
+                <div class="review-card-header">
+                    <span style="font-size:13px; font-weight:700; color:#475569;">To</span>
+                    <button class="card-star-btn"><i class="fa-solid fa-star"></i> Favorite</button>
                 </div>
-                <div style="padding-top:12px;">
-                    <div style="font-size:15px; font-weight:700; color:#111827; text-transform:capitalize;" id="review-name">Peer G Cafe</div>
-                    <div style="font-size:13px; color:#6b7280; margin-top:2px;" id="review-number">983655677</div>
+                <div style="padding-top:14px;">
+                    <div style="font-size:16px; font-weight:700; color:#1e293b;" id="rev-target-name">PEER G CAFE</div>
+                    <div style="font-size:13px; color:#64748b; margin-top:3px;" id="rev-target-num">983655677</div>
                 </div>
             </div>
 
             <div class="review-card">
-                <div class="review-row">
+                <div style="display:flex; justify-content:space-between; align-items:center; padding-bottom:12px; border-bottom:1px solid #f1f5f9;">
                     <div>
-                        <div style="font-size:14px; font-weight:600; color:#374151;">Redeem Loyalty Points</div>
-                        <div style="font-size:11px; color:#9ca3af; margin-top:2px;">Minimum 10000 points required to redeem</div>
+                        <div style="font-size:14px; font-weight:600; color:#1e293b;">Redeem Loyalty Points</div>
+                        <div style="font-size:11px; color:#94a3b8;">Minimum 10,000 points required</div>
                     </div>
-                    <div class="toggle-switch" onclick="this.classList.toggle('active')"></div>
+                    <div style="width:38px; height:20px; background:#e2e8f0; border-radius:15px; position:relative;">
+                        <div style="width:16px; height:16px; background:#fff; border-radius:50%; position:absolute; top:2px; left:2px;"></div>
+                    </div>
                 </div>
-                <div class="review-row" style="padding-bottom:5px;">
-                    <div style="width:100%; display:flex; justify-content:space-between; align-items:center;">
-                        <span style="font-size:14px; font-weight:600; color:#374151;">Payment Method</span>
-                        <span style="background:#f3f4f6; padding:4px 12px; border-radius:15px; font-size:12px; border:1px solid #e5e7eb; font-weight:500;" id="review-method-label">QR Payment</span>
-                    </div>
+                <div style="padding-top:12px; display:flex; justify-content:space-between; align-items:center;">
+                    <span style="font-size:13px; color:#64748b;">Fee</span>
+                    <span style="font-size:13px; font-weight:600; color:#16a34a;">FREE</span>
                 </div>
             </div>
         </div>
 
-        <div class="review-footer">
+        <div class="review-footer-bar">
             <div>
-                <div class="total-label">Total</div>
-                <div class="total-val" id="review-bottom-amount">Rs. 1,300.00</div>
+                <div style="font-size:11px; color:#64748b;">Total</div>
+                <div style="font-size:17px; font-weight:800; color:#1e293b;" id="rev-footer-amt">Rs. 1,300.00</div>
             </div>
-            <button class="confirm-btn" onclick="goToPinScreen()">
+            <button class="confirm-pill" onclick="switchScreen('screen-pin')">
                 Confirm <i class="fa-solid fa-arrow-right"></i>
             </button>
         </div>
     </div>
 
-    <!-- SCREEN 4: MPIN SCREEN -->
-    <div id="screen-pin" class="app-screen mpin-screen">
-        <div class="mpin-header">
-            <div class="action-icon" style="color:white; background:transparent;" onclick="navigateTo('screen-confirm')"><i class="fa-solid fa-arrow-left"></i></div>
-            <div class="dots"><span></span><span></span><span></span></div>
-            <div class="icons">
-                <i class="fa-regular fa-circle-question" onclick="showToast('Customer Support 4444')"></i>
-                <i class="fa-solid fa-house" onclick="navigateTo('screen-input')"></i>
+    <!-- SCREEN 4: MPIN INPUT -->
+    <div id="screen-pin" class="screen mpin-wrap">
+        <div class="mpin-dark-header">
+            <i class="fa-solid fa-arrow-left" style="cursor:pointer;" onclick="switchScreen('screen-confirm')"></i>
+            <div style="display:flex; gap:6px;">
+                <div style="width:6px; height:6px; background:var(--yellow); border-radius:50%;"></div>
+                <div style="width:6px; height:6px; background:var(--yellow); border-radius:50%;"></div>
+                <div style="width:6px; height:6px; background:var(--yellow); border-radius:50%;"></div>
             </div>
-        </div>
-        
-        <div class="mpin-content">
-            <h2>Confirm Transaction</h2>
-            <p>Enter your 4-Digit MPIN</p>
+            <i class="fa-regular fa-circle-question" style="cursor:pointer;"></i>
         </div>
 
-        <div class="mpin-dots-row">
-            <div class="mpin-dots-left">
-                <div class="mpin-dot" id="dot-0"></div>
-                <div class="mpin-dot" id="dot-1"></div>
-                <div class="mpin-dot" id="dot-2"></div>
-                <div class="mpin-dot" id="dot-3"></div>
+        <div style="padding: 24px 20px 10px;">
+            <h2 style="font-size: 20px; font-weight: 700; color: #1e293b;">Confirm Transaction</h2>
+            <p style="font-size: 13px; color: #64748b; margin-top: 4px;">Enter your 4-Digit MPIN</p>
+        </div>
+
+        <div class="pin-dots-display">
+            <div class="dots-left">
+                <div class="dot-slot" id="slot-0"></div>
+                <div class="dot-slot" id="slot-1"></div>
+                <div class="dot-slot" id="slot-2"></div>
+                <div class="dot-slot" id="slot-3"></div>
             </div>
-            <span class="mpin-forgot" onclick="showToast('Reset MPIN on JazzCash App')">Forgot MPIN?</span>
+            <span style="font-size:12px; font-weight:600; color:#d90429; cursor:pointer;">Forgot MPIN?</span>
         </div>
 
-        <div class="mpin-warning">
-            <i class="fa-solid fa-circle-info" style="color:#d97706;"></i> Never share your MPIN with anyone
+        <div style="padding: 16px 24px 0; font-size: 11.5px; color: #64748b; display: flex; align-items: center; gap: 6px;">
+            <i class="fa-solid fa-circle-info" style="color:#d90429;"></i> Never share your MPIN with anyone
         </div>
 
-        <div class="keypad">
-            <button onclick="pressPin('1')">1</button>
-            <button onclick="pressPin('2')">2</button>
-            <button onclick="pressPin('3')">3</button>
-            <button onclick="pressPin('4')">4</button>
-            <button onclick="pressPin('5')">5</button>
-            <button onclick="pressPin('6')">6</button>
-            <button onclick="pressPin('7')">7</button>
-            <button onclick="pressPin('8')">8</button>
-            <button onclick="pressPin('9')">9</button>
-            <button style="visibility:hidden;"></button>
-            <button onclick="pressPin('0')">0</button>
-            <button onclick="pressPin('del')"><i class="fa-solid fa-delete-left" style="font-size:20px;"></i></button>
+        <div class="keypad-grid">
+            <button class="keypad-btn" onclick="enterPin(1)">1</button>
+            <button class="keypad-btn" onclick="enterPin(2)">2</button>
+            <button class="keypad-btn" onclick="enterPin(3)">3</button>
+            <button class="keypad-btn" onclick="enterPin(4)">4</button>
+            <button class="keypad-btn" onclick="enterPin(5)">5</button>
+            <button class="keypad-btn" onclick="enterPin(6)">6</button>
+            <button class="keypad-btn" onclick="enterPin(7)">7</button>
+            <button class="keypad-btn" onclick="enterPin(8)">8</button>
+            <button class="keypad-btn" onclick="enterPin(9)">9</button>
+            <button class="keypad-btn" style="visibility:hidden;"></button>
+            <button class="keypad-btn" onclick="enterPin(0)">0</button>
+            <button class="keypad-btn" onclick="deletePin()"><i class="fa-solid fa-delete-left"></i></button>
         </div>
-
-        <div class="mpin-footer">Need Help? Contact JazzCash helpline 4444</div>
     </div>
 
-    <!-- SCREEN 5: TRANSACTION SUCCESSFUL (SCREENSHOT REPLICA) -->
-    <div id="screen-success" class="app-screen success-screen">
+    <!-- SCREEN 5: FINAL TRANSACTION SUCCESS SCREEN -->
+    <div id="screen-success" class="screen receipt-screen">
         
-        <!-- Original JazzCash Icon SVG with Ambient Halo Glow -->
-        <div class="success-logo-wrapper">
-            <svg width="74" height="74" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <!-- Authentic Original JazzCash Emblem -->
+        <div style="width: 76px; height: 76px; margin-bottom: 12px; display:flex; align-items:center; justify-content:center;">
+            <svg viewBox="0 0 100 100" width="76" height="76">
                 <defs>
-                    <radialGradient id="discGrad" cx="45%" cy="38%" r="65%">
-                        <stop offset="0%" stop-color="#3e434c" />
-                        <stop offset="60%" stop-color="#23262d" />
-                        <stop offset="100%" stop-color="#14161a" />
+                    <radialGradient id="ringGlow" cx="50%" cy="50%" r="50%">
+                        <stop offset="78%" stop-color="#1e2229"/>
+                        <stop offset="92%" stop-color="#ff3b00"/>
+                        <stop offset="100%" stop-color="#ff9900"/>
                     </radialGradient>
-                    <linearGradient id="glowRing" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stop-color="#ff7300" />
-                        <stop offset="50%" stop-color="#e11d48" />
-                        <stop offset="100%" stop-color="#ff9d00" />
+                    <radialGradient id="metalDisc" cx="40%" cy="35%" r="65%">
+                        <stop offset="0%" stop-color="#3d424b"/>
+                        <stop offset="60%" stop-color="#24272d"/>
+                        <stop offset="100%" stop-color="#141619"/>
+                    </radialGradient>
+                    <linearGradient id="yellowGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#ffea00"/>
+                        <stop offset="100%" stop-color="#ffb700"/>
                     </linearGradient>
-                    <filter id="softGlow" x="-25%" y="-25%" width="150%" height="150%">
-                        <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#ea580c" flood-opacity="0.25"/>
+                    <linearGradient id="redGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#ff1744"/>
+                        <stop offset="100%" stop-color="#b7001b"/>
+                    </linearGradient>
+                    <filter id="shadow">
+                        <feDropShadow dx="0" dy="3" stdDeviation="3" flood-opacity="0.4"/>
                     </filter>
                 </defs>
-                <!-- Glow & Metallic Ring -->
-                <circle cx="50" cy="50" r="49" fill="none" stroke="url(#glowRing)" stroke-width="2.6" filter="url(#softGlow)" />
-                <circle cx="50" cy="50" r="46.5" fill="url(#discGrad)" />
-                <circle cx="50" cy="50" r="45" fill="none" stroke="#4a505b" stroke-width="0.8" opacity="0.65" />
-
-                <!-- Original Overlapping Jazz Shape -->
-                <!-- Left Yellow Wing -->
-                <path d="M 36 27 
-                         C 47 27 52 32 51 40 
-                         C 50 48 43 57 36 63 
-                         C 30 69 25 73 34 73 
-                         C 47 73 56 61 57 47 
-                         C 58 35 49 27 36 27 Z" 
-                      fill="#fbbd04" />
-
-                <!-- Right Red Wing -->
-                <path d="M 48 35 
-                         C 56 36 60 44 58 52 
-                         C 55 62 46 68 53 71 
-                         C 62 71 74 58 72 45 
-                         C 71 31 59 26 48 35 Z" 
-                      fill="#dc2626" />
+                <circle cx="50" cy="50" r="48" fill="url(#ringGlow)" />
+                <circle cx="50" cy="50" r="44" fill="url(#metalDisc)" stroke="#0e1013" stroke-width="1.5" />
+                <path d="M 39 30 C 49 34 52 46 44 60 C 37 72 26 73 24 72 C 34 68 36 60 35 52 C 34 40 42 32 39 30 Z" fill="url(#yellowGrad)" filter="url(#shadow)" transform="rotate(-6 50 50) translate(2, 0)" />
+                <path d="M 45 32 C 57 32 68 40 67 52 C 66 62 57 69 49 71 C 59 66 61 58 59 50 C 57 41 50 35 45 32 Z" fill="url(#redGrad)" filter="url(#shadow)" transform="rotate(-6 50 50) translate(6, 0)" />
             </svg>
         </div>
 
-        <div class="success-date" id="success-datetime">November 1,2026 at 23:08</div>
-        <div class="success-title">Transaction Successful</div>
-        <div class="success-subtitle" id="success-subtitle">QR Payment</div>
+        <div style="font-size: 11.5px; font-weight: 500; color: #64748b; margin-bottom: 4px;" id="rec-timestamp">
+            October 30, 2026 at 22:57[span_0](start_span)[span_0](end_span)
+        </div>
 
-        <!-- Receipt Card with Notch Cutouts -->
+        <h2 style="font-size: 21px; font-weight: 700; color: #1e293b; margin-bottom: 4px;">
+            Transaction Successful[span_1](start_span)[span_1](end_span)
+        </h2>
+        <div style="font-size: 13px; font-weight: 500; color: #64748b;" id="rec-method-label">
+            QR Payment[span_2](start_span)[span_2](end_span)
+        </div>
+
+        <!-- Receipt Card -->
         <div class="receipt-card">
-            <div class="success-amount" id="success-amount-display">Rs. 1,300<sup>.00</sup></div>
-            <div class="success-transferred">transferred to</div>
-            <div class="success-name" id="success-display-name">Peer G Cafe</div>
-            <div class="success-number" id="success-display-number">983655677</div>
-
-            <div class="receipt-divider"></div>
-
-            <div class="receipt-row">
-                <span>Transaction Amount</span>
-                <span id="success-row-amount">Rs. 1,300.00</span>
+            <div class="receipt-amount">
+                <span id="rec-amount-whole">Rs. 1,300</span><sup>.00</sup>[span_3](start_span)[span_3](end_span)
             </div>
+
+            <div style="font-size: 12px; color: #64748b; margin-top: 6px;">transferred to[span_4](start_span)[span_4](end_span)</div>
+            <div style="font-size: 16px; font-weight: 700; color: #1e293b; margin-top: 3px;" id="rec-target-name">Peer G Cafe</div>[span_5](start_span)[span_5](end_span)
+            <div style="font-size: 13px; color: #64748b; margin-top: 2px;" id="rec-target-num">983655677</div>[span_6](start_span)[span_6](end_span)
+
+            <div class="dashed-split"></div>
+
             <div class="receipt-row">
-                <span>TID</span>
-                <span id="success-tid">728863969359</span>
+                <span>Transaction Amount</span>[span_7](start_span)[span_7](end_span)
+                <span class="val" id="rec-trans-amt">Rs. 1,300.00</span>[span_8](start_span)[span_8](end_span)
+            </div>
+            <div class="receipt-row" style="margin-bottom: 0;">
+                <span>TID</span>[span_9](start_span)[span_9](end_span)
+                <span class="val" id="rec-tid">728721571181</span>[span_10](start_span)[span_10](end_span)
             </div>
         </div>
 
-        <!-- Securely sent via JazzCash Badge -->
-        <div class="secure-badge">
-            <span>Securely sent via</span>
-            <svg width="18" height="18" viewBox="0 0 100 100">
-                <circle cx="50" cy="50" r="48" fill="#1e2024" />
-                <path d="M 36 27 C 47 27 52 32 51 40 C 50 48 43 57 36 63 C 30 69 25 73 34 73 C 47 73 56 61 57 47 C 58 35 49 27 36 27 Z" fill="#fbbd04" />
-                <path d="M 48 35 C 56 36 60 44 58 52 C 55 62 46 68 53 71 C 62 71 74 58 72 45 C 71 31 59 26 48 35 Z" fill="#dc2626" />
+        <!-- Secure Footer Badge -->
+        <div style="font-size: 11px; color: #94a3b8; display: flex; align-items: center; justify-content: center; gap: 6px; margin-bottom: 24px;">
+            Securely sent via[span_11](start_span)[span_11](end_span)
+            <svg viewBox="0 0 100 100" width="16" height="16">
+                <circle cx="50" cy="50" r="48" fill="#1e2229"/>
+                <path d="M 38 30 C 49 34 52 46 44 60 C 37 72 26 73 24 72 C 34 68 36 60 35 52 C 34 40 42 32 39 30 Z" fill="#ffb700"/>
+                <path d="M 45 32 C 57 32 68 40 67 52 C 66 62 57 69 49 71 C 59 66 61 58 59 50 C 57 41 50 35 45 32 Z" fill="#d90429"/>
             </svg>
         </div>
 
         <!-- Action Buttons -->
-        <div class="success-actions">
-            <button class="action-btn" onclick="saveReceipt()">
-                <i class="fa-solid fa-arrow-down-to-bracket"></i> Save
+        <div class="action-pills-row">
+            <button class="pill-btn" onclick="alert('Receipt Saved Successfully!')">
+                <i class="fa-solid fa-download"></i> Save[span_12](start_span)[span_12](end_span)
             </button>
-            <button class="action-btn" onclick="shareReceipt()">
-                <i class="fa-solid fa-arrow-up-from-bracket"></i> Share with notifier
+            <button class="pill-btn" onclick="alert('Shared with notifier!')">
+                <i class="fa-solid fa-arrow-up-from-bracket"></i> Share with notifier[span_13](start_span)[span_13](end_span)
             </button>
         </div>
+
     </div>
-
-    <!-- Hidden audio element for 1.mp3 -->
-    <audio id="success-sound" src="1.mp3" preload="auto"></audio>
-
-    <!-- Toast Notification -->
-    <div id="toast" class="toast-msg">Notification message</div>
 
 </div>
 
+<!-- Audio Player for 1.mp3 -->
+<audio id="paymentAudio" src="1.mp3" preload="auto"></audio>
+
 <script>
-    // App State
-    const state = {
-        name: "Peer G Cafe",
-        number: "983655677",
-        amount: 1300,
-        method: "QR Payment",
-        methodCategory: "JazzCash Wallet",
-        tid: "728863969359",
-        pin: ""
-    };
+    let currentMethod = 'QR Payment';
+    let currentPin = '';
 
-    // Synthesized chime fallback via Web Audio API (ensures sound always plays)
-    function playFallbackChime() {
-        try {
-            const AudioCtx = window.AudioContext || window.webkitAudioContext;
-            if (!AudioCtx) return;
-            const ctx = new AudioCtx();
-            if (ctx.state === 'suspended') {
-                ctx.resume();
-            }
-
-            const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
-            notes.forEach((freq, idx) => {
-                const osc = ctx.createOscillator();
-                const gain = ctx.createGain();
-                
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(freq, ctx.currentTime + idx * 0.08);
-                
-                gain.gain.setValueAtTime(0.001, ctx.currentTime + idx * 0.08);
-                gain.gain.exponentialRampToValueAtTime(0.22, ctx.currentTime + idx * 0.08 + 0.02);
-                gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + idx * 0.08 + 0.45);
-                
-                osc.connect(gain);
-                gain.connect(ctx.destination);
-                
-                osc.start(ctx.currentTime + idx * 0.08);
-                osc.stop(ctx.currentTime + idx * 0.08 + 0.5);
-            });
-        } catch (e) {
-            console.warn('Audio API error:', e);
-        }
-    }
-
-    // Play 1.mp3 with automatic fallback
-    function playSuccessSound() {
-        const audio = document.getElementById('success-sound');
-        if (audio) {
-            audio.currentTime = 0;
-            const playPromise = audio.play();
-            if (playPromise !== undefined) {
-                playPromise.catch(err => {
-                    console.log('1.mp3 playback failed or not found, using fallback sound:', err);
-                    playFallbackChime();
-                });
-            }
-        } else {
-            playFallbackChime();
-        }
-    }
-
-    // Screen Navigation
-    function navigateTo(screenId) {
-        document.querySelectorAll('.app-screen').forEach(screen => {
-            screen.classList.remove('active');
-        });
+    function switchScreen(screenId) {
+        document.querySelectorAll('.screen').forEach(scr => scr.classList.remove('active'));
         const target = document.getElementById(screenId);
-        if (target) {
-            target.classList.add('active');
-            target.scrollTop = 0;
-        }
+        if (target) target.classList.add('active');
     }
 
-    // Input Validation
     function validateInput() {
-        const nameVal = document.getElementById('input-name').value.trim();
-        const numVal = document.getElementById('input-number').value.trim();
-        const amtVal = document.getElementById('input-amount').value.trim();
-        const btn = document.getElementById('input-next-btn');
+        const name = document.getElementById('cust-name').value.trim();
+        const num = document.getElementById('cust-number').value.trim();
+        const amt = document.getElementById('cust-amount').value.trim();
+        document.getElementById('btn-to-method').disabled = !(name && num && amt);
+    }
 
-        if (nameVal && numVal && amtVal && Number(amtVal) > 0) {
-            btn.removeAttribute('disabled');
-        } else {
-            btn.setAttribute('disabled', 'true');
+    function pickMethod(el, methodName) {
+        document.querySelectorAll('.method-item').forEach(m => m.classList.remove('selected'));
+        el.classList.add('selected');
+        currentMethod = methodName;
+    }
+
+    function openReviewScreen() {
+        const name = document.getElementById('cust-name').value || 'Peer G Cafe';
+        const num = document.getElementById('cust-number').value || '983655677';
+        const amt = parseFloat(document.getElementById('cust-amount').value || 1300);
+        const formattedAmt = amt.toLocaleString('en-PK', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+        document.getElementById('rev-method-sub').innerText = currentMethod;
+        document.getElementById('rev-target-name').innerText = name.toUpperCase();
+        document.getElementById('rev-target-num').innerText = num;
+        document.getElementById('rev-total-header').innerHTML = `Rs. ${Math.floor(amt).toLocaleString()} <i class="fa-solid fa-chevron-down" style="font-size:14px; color:#94a3b8;"></i>`;
+        document.getElementById('rev-footer-amt').innerText = `Rs. ${formattedAmt}`;
+
+        switchScreen('screen-confirm');
+    }
+
+    function enterPin(digit) {
+        if (currentPin.length < 4) {
+            currentPin += digit;
+            updatePinDots();
+
+            if (currentPin.length === 4) {
+                setTimeout(finalizePayment, 350);
+            }
         }
     }
 
-    function goToMethodScreen() {
-        state.name = document.getElementById('input-name').value.trim();
-        state.number = document.getElementById('input-number').value.trim();
-        state.amount = Number(document.getElementById('input-amount').value.trim()) || 1300;
-        navigateTo('screen-method');
-    }
-
-    function selectMethod(methodName, category, elem) {
-        state.method = methodName;
-        state.methodCategory = category;
-
-        document.querySelectorAll('.method-item').forEach(item => item.classList.remove('selected'));
-        elem.classList.add('selected');
-    }
-
-    function goToConfirmScreen() {
-        const formattedAmount = state.amount.toLocaleString();
-
-        document.getElementById('review-type-header').textContent = state.methodCategory;
-        document.getElementById('review-total-amount').textContent = `Rs. ${formattedAmount}`;
-        document.getElementById('review-bottom-amount').textContent = `Rs. ${formattedAmount}.00`;
-        document.getElementById('review-name').textContent = state.name;
-        document.getElementById('review-number').textContent = state.number;
-        document.getElementById('review-method-label').textContent = state.method;
-
-        navigateTo('screen-confirm');
-    }
-
-    function goToPinScreen() {
-        state.pin = "";
-        updatePinDots();
-        navigateTo('screen-pin');
-    }
-
-    function pressPin(key) {
-        if (key === 'del') {
-            state.pin = state.pin.slice(0, -1);
-        } else if (state.pin.length < 4) {
-            state.pin += key;
-        }
-
-        updatePinDots();
-
-        // When 4 digits are completed, complete transaction
-        if (state.pin.length === 4) {
-            setTimeout(() => {
-                completeTransaction();
-            }, 250);
+    function deletePin() {
+        if (currentPin.length > 0) {
+            currentPin = currentPin.slice(0, -1);
+            updatePinDots();
         }
     }
 
     function updatePinDots() {
         for (let i = 0; i < 4; i++) {
-            const dot = document.getElementById(`dot-${i}`);
-            if (i < state.pin.length) {
-                dot.classList.add('filled');
+            const slot = document.getElementById(`slot-${i}`);
+            if (i < currentPin.length) {
+                slot.classList.add('active');
             } else {
-                dot.classList.remove('filled');
+                slot.classList.remove('active');
             }
         }
     }
 
-    function generateTID() {
-        let tid = '728';
-        for (let i = 0; i < 9; i++) {
-            tid += Math.floor(Math.random() * 10);
+    // Audio Playback with Web Audio API Fallback
+    function playPaymentSuccessSound() {
+        const audio = document.getElementById('paymentAudio');
+        if (audio) {
+            audio.currentTime = 0;
+            const playPromise = audio.play();
+            if (playPromise !== undefined) {
+                playPromise.catch(() => {
+                    playFallbackSynthesizedSound();
+                });
+            }
+        } else {
+            playFallbackSynthesizedSound();
         }
-        return tid;
     }
 
-    function completeTransaction() {
-        state.tid = generateTID();
-        const formattedAmount = state.amount.toLocaleString();
+    function playFallbackSynthesizedSound() {
+        try {
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            if (!AudioContext) return;
+            const ctx = new AudioContext();
+            
+            const osc1 = ctx.createOscillator();
+            const osc2 = ctx.createOscillator();
+            const gainNode = ctx.createGain();
 
-        // Format Date e.g. November 1,2026 at 23:08
+            osc1.type = 'sine';
+            osc2.type = 'triangle';
+
+            osc1.frequency.setValueAtTime(587.33, ctx.currentTime); // D5
+            osc1.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.15); // A5
+
+            osc2.frequency.setValueAtTime(880, ctx.currentTime + 0.15);
+            osc2.frequency.exponentialRampToValueAtTime(1174.66, ctx.currentTime + 0.35); // D6
+
+            gainNode.gain.setValueAtTime(0.25, ctx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.6);
+
+            osc1.connect(gainNode);
+            osc2.connect(gainNode);
+            gainNode.connect(ctx.destination);
+
+            osc1.start();
+            osc2.start(ctx.currentTime + 0.15);
+            osc1.stop(ctx.currentTime + 0.6);
+            osc2.stop(ctx.currentTime + 0.6);
+        } catch (e) {
+            console.warn('Audio feedback blocked or not supported');
+        }
+    }
+
+    function finalizePayment() {
+        const name = document.getElementById('cust-name').value || 'Peer G Cafe';
+        const num = document.getElementById('cust-number').value || '983655677';
+        const rawAmt = parseFloat(document.getElementById('cust-amount').value || 1300);
+        const wholeAmt = Math.floor(rawAmt).toLocaleString();
+        const fullAmtFormatted = rawAmt.toLocaleString('en-PK', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+        // Update Receipt Fields
+        document.getElementById('rec-target-name').innerText = name;
+        document.getElementById('rec-target-num').innerText = num;
+        document.getElementById('rec-amount-whole').innerText = `Rs. ${wholeAmt}`;
+        document.getElementById('rec-trans-amt').innerText = `Rs. ${fullAmtFormatted}`;
+        document.getElementById('rec-method-label').innerText = currentMethod;
+
+        // Dynamic Time and TID
         const now = new Date();
-        const months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
-        const monthName = months[now.getMonth()];
-        const day = now.getDate();
-        const year = now.getFullYear();
-        const hours = String(now.getHours()).padStart(2, '0');
-        const minutes = String(now.getMinutes()).padStart(2, '0');
-        const formattedDateTime = `${monthName} ${day},${year} at ${hours}:${minutes}`;
+        const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        const formattedDate = `${months[now.getMonth()]} ${now.getDate()}, ${now.getFullYear()} at ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+        document.getElementById('rec-timestamp').innerText = formattedDate;
 
-        document.getElementById('success-datetime').textContent = formattedDateTime;
-        document.getElementById('success-subtitle').textContent = state.method;
-        document.getElementById('success-amount-display').innerHTML = `Rs. ${formattedAmount}<sup>.00</sup>`;
-        document.getElementById('success-display-name').textContent = state.name;
-        document.getElementById('success-display-number').textContent = state.number;
-        document.getElementById('success-row-amount').textContent = `Rs. ${formattedAmount}.00`;
-        document.getElementById('success-tid').textContent = state.tid;
+        const randomTid = '728' + Math.floor(100000000 + Math.random() * 900000000);
+        document.getElementById('rec-tid').innerText = randomTid;
 
-        navigateTo('screen-success');
+        // Play Sound and Switch
+        playPaymentSuccessSound();
+        switchScreen('screen-success');
 
-        // Play 1.mp3 sound immediately on completion
-        playSuccessSound();
+        // Reset pin
+        currentPin = '';
+        updatePinDots();
     }
-
-    function saveReceipt() {
-        showToast("Receipt saved to Gallery");
-    }
-
-    function shareReceipt() {
-        showToast("Sharing receipt details...");
-    }
-
-    function resetForm() {
-        document.getElementById('input-name').value = "Peer G Cafe";
-        document.getElementById('input-number').value = "983655677";
-        document.getElementById('input-amount').value = "1300";
-        validateInput();
-        showToast("Form reset to defaults");
-    }
-
-    function showToast(message) {
-        const toast = document.getElementById('toast');
-        toast.textContent = message;
-        toast.classList.add('show');
-        setTimeout(() => {
-            toast.classList.remove('show');
-        }, 2200);
-    }
-
-    window.onload = function() {
-        validateInput();
-    };
 </script>
 </body>
 </html>
-```
