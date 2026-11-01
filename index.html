@@ -39,7 +39,6 @@
             overflow: hidden;
         }
 
-        /* Responsive Mobile Container */
         .phone-shell {
             width: 100vw;
             height: 100vh;
@@ -385,11 +384,11 @@
             transform: scale(0.92);
         }
 
-        /* SCREEN 5: FINAL RECEIPT SCREEN (100% REPLICA) */
+        /* SCREEN 5: FINAL RECEIPT SCREEN */
         .receipt-screen {
             background: #f4f5f7;
             align-items: center;
-            padding: 30px 16px 20px;
+            padding: 24px 16px 20px;
             position: relative;
         }
 
@@ -398,14 +397,13 @@
             width: 100%;
             max-width: 350px;
             border-radius: 20px;
-            padding: 32px 20px 24px;
+            padding: 30px 20px 24px;
             text-align: center;
             position: relative;
             box-shadow: 0 4px 20px rgba(0,0,0,0.03);
-            margin: 20px 0 24px;
+            margin: 18px 0 22px;
         }
 
-        /* Ticket Notches */
         .receipt-card::before, .receipt-card::after {
             content: '';
             position: absolute;
@@ -428,7 +426,7 @@
             display: flex;
             align-items: baseline;
             justify-content: center;
-            gap: 2px;
+            gap: 4px;
         }
 
         .receipt-amount sup {
@@ -445,6 +443,7 @@
         .receipt-row {
             display: flex;
             justify-content: space-between;
+            align-items: center;
             font-size: 13.5px;
             color: #64748b;
             margin-bottom: 12px;
@@ -660,7 +659,7 @@
     <!-- SCREEN 5: FINAL TRANSACTION SUCCESS SCREEN -->
     <div id="screen-success" class="screen receipt-screen">
         
-        <!-- Authentic Original JazzCash Emblem -->
+        <!-- Original JazzCash Emblem (Vector SVG) -->
         <div style="width: 76px; height: 76px; margin-bottom: 12px; display:flex; align-items:center; justify-content:center;">
             <svg viewBox="0 0 100 100" width="76" height="76">
                 <defs>
@@ -820,7 +819,6 @@
         }
     }
 
-    // Audio Playback with Web Audio API Fallback
     function playPaymentSuccessSound() {
         const audio = document.getElementById('paymentAudio');
         if (audio) {
@@ -849,11 +847,11 @@
             osc1.type = 'sine';
             osc2.type = 'triangle';
 
-            osc1.frequency.setValueAtTime(587.33, ctx.currentTime); // D5
-            osc1.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.15); // A5
+            osc1.frequency.setValueAtTime(587.33, ctx.currentTime);
+            osc1.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.15);
 
             osc2.frequency.setValueAtTime(880, ctx.currentTime + 0.15);
-            osc2.frequency.exponentialRampToValueAtTime(1174.66, ctx.currentTime + 0.35); // D6
+            osc2.frequency.exponentialRampToValueAtTime(1174.66, ctx.currentTime + 0.35);
 
             gainNode.gain.setValueAtTime(0.25, ctx.currentTime);
             gainNode.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.6);
@@ -878,14 +876,12 @@
         const wholeAmt = Math.floor(rawAmt).toLocaleString();
         const fullAmtFormatted = rawAmt.toLocaleString('en-PK', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-        // Update Receipt Fields
         document.getElementById('rec-target-name').innerText = name;
         document.getElementById('rec-target-num').innerText = num;
         document.getElementById('rec-amount-whole').innerText = `Rs. ${wholeAmt}`;
         document.getElementById('rec-trans-amt').innerText = `Rs. ${fullAmtFormatted}`;
         document.getElementById('rec-method-label').innerText = currentMethod;
 
-        // Dynamic Time and TID
         const now = new Date();
         const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
         const formattedDate = `${months[now.getMonth()]} ${now.getDate()}, ${now.getFullYear()} at ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
@@ -894,11 +890,9 @@
         const randomTid = '728' + Math.floor(100000000 + Math.random() * 900000000);
         document.getElementById('rec-tid').innerText = randomTid;
 
-        // Play Sound and Switch
         playPaymentSuccessSound();
         switchScreen('screen-success');
 
-        // Reset pin
         currentPin = '';
         updatePinDots();
     }
